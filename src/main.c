@@ -1,6 +1,7 @@
-#include <stdio.h>
+//
+// Created by springik on 05.11.26.
+//
 
 int main(void) {
-    printf("Hello, World!\n");
     return 0;
 }

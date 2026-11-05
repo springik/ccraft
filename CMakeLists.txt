@@ -3,12 +3,11 @@ project(ccraft C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(ccraft src/main.c
-        src/client.h
-        src/protocol/types.c
-        src/protocol/packet.c
-        src/states/handshake.c
-        src/states/status.c
-        src/states/login.c
-        src/states/play.c
-        src/states/play_init.c)
+add_executable(ccraft src/main.c src/network/tcp_server.c
+        src/protocol/state_machine.c
+        src/protocol/handshake.c
+        src/protocol/login.c
+        src/game/player.c
+        include/protocol/state_machine.h
+        include/protocol/context.h
+        include/network/connection.h)
