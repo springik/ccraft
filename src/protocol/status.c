@@ -8,6 +8,7 @@
 #include "../../include/protocol/context.h"
 #include "../../include/protocol/varint.h"
 #include "../../include/network/connection.h"
+#include "packet_builder.c"
 
 static void send_status_response(ProtocolContext* ctx) {
     //TODO: read from file at least and do not hardcode
@@ -17,6 +18,12 @@ static void send_status_response(ProtocolContext* ctx) {
         "\"description\": {\"text\": \"Hello from C23 Server!\""
     "}";
 
+    PacketBuilder pb;
+    pb_init(&pb, 0x00);
+    pb_write_string(&pb, json);
+    pb_send(&pb, ctx->net_conn);
+
+    /*
     size_t json_len = strlen(json);
 
     // predefine payload
@@ -37,9 +44,16 @@ static void send_status_response(ProtocolContext* ctx) {
     packet_len += payload_len;
 
     network_send_data(ctx->net_conn, packet, packet_len);
+    */
 }
 
 static void send_ping_response(ProtocolContext* ctx, const uint8_t* ping_payload) {
+    PacketBuilder pb;
+    pb_init(&pb, 0x01);
+    pb_write_bytes(&pb, ping_payload, 8);
+    pb_send(&pb, ctx->net_conn);
+
+    /*
     uint8_t payload[9];
     size_t payload_len = 0;
 
@@ -57,6 +71,7 @@ static void send_ping_response(ProtocolContext* ctx, const uint8_t* ping_payload
     packet_len += payload_len;
 
     network_send_data(ctx->net_conn, packet, packet_len);
+    */
 }
 
 static MinecraftState status_handle(ProtocolContext* ctx, uint32_t packet_id, const uint8_t* data, size_t len) {

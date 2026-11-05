@@ -13,4 +13,6 @@ add_executable(ccraft src/main.c src/network/tcp_server.c
         include/network/connection.h
         include/protocol/varint.h
         src/protocol/varint.c
-        src/protocol/status.c)
+        src/protocol/status.c
+        include/protocol/packet_builder.h
+        src/protocol/packet_builder.c)
