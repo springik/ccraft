@@ -13,7 +13,7 @@ void register_state(MinecraftState state, StateBehaviour behaviour) {
     }
 }
 
-void process_client_packet(ClientConnection *client, uint32_t packet_id, const uint8_t *data, size_t len) {
+void process_client_packet(ProtocolContext *client, uint32_t packet_id, const uint8_t *data, size_t len) {
     StateBehaviour *current_behaviour = &state_machine_table[client->current_state];
 
     if (current_behaviour->handle_packet == nullptr) {
