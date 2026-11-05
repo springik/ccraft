@@ -48,6 +48,10 @@ void pb_write_ushort(PacketBuilder* pb, uint16_t value) {
     pb_write_bytes(pb, bytes, 2);
 }
 
+void pb_write_uuid(PacketBuilder* pb, const uint8_t uuid[16]) {
+    pb_write_bytes(pb, uuid, 16);
+}
+
 void pb_send(PacketBuilder* pb, NetworkConnection* conn) {
     if (pb->overflow) {
         // Consider logging an err here right now the overflowed packets are silently dropped

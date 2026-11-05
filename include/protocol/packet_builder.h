@@ -25,3 +25,4 @@ void pb_write_varint(PacketBuilder* pb, int32_t value);
 void pb_write_string(PacketBuilder* pb, const char* value);
 void pb_write_ushort(PacketBuilder* pb, uint16_t value);
 void pb_write_bytes(PacketBuilder* pb, uint8_t* value, size_t len);
+void pb_write_uuid(PacketBuilder* pb, const uint8_t uuid[16]);
