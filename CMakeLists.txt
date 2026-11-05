@@ -10,4 +10,6 @@ add_executable(ccraft src/main.c src/network/tcp_server.c
         src/game/player.c
         include/protocol/state_machine.h
         include/protocol/context.h
-        include/network/connection.h)
+        include/network/connection.h
+        include/protocol/varint.h
+        src/protocol/varint.c)
