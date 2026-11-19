@@ -3,6 +3,7 @@
 //
 
 #include "../../include/protocol/state_machine.h"
+#include "../../include/protocol/context.h"
 
 constexpr size_t STATE_CAPACITY = 32;
 static StateBehaviour state_machine_table[STATE_CAPACITY] = {};
