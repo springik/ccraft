@@ -68,3 +68,11 @@ static MinecraftState handshake_handle(ProtocolContext* ctx, uint32_t packet_id,
     // invalid state request(from current state)
     return MC_STATE_DISCONNECTED;
 };
+
+void init_handshake_module(void) {
+    register_state(MC_STATE_HANDSHAKE, (StateBehaviour){
+    .on_enter = nullptr,
+    .handle_packet = handshake_handle,
+    .on_exit = nullptr,
+    });
+}
