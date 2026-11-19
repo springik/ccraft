@@ -49,7 +49,8 @@ VarIntResult read_varint(const uint8_t* buffer, size_t max_len) {
     size_t bytes_read = 0;
 
     while (true) {
-        /* Prevent buff overflow
+        /*
+         * Prevent buff overflow
          * not trusting the network layer
         */
         if (bytes_read >= max_len) {
@@ -71,7 +72,8 @@ VarIntResult read_varint(const uint8_t* buffer, size_t max_len) {
 
         position += 7;
 
-        /* Another sanity check
+        /*
+         * Another sanity check
          * not trusting the client to respect the type
          * malicious client prevention
         */
