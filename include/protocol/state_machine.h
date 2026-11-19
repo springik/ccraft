@@ -8,7 +8,7 @@
 
 typedef struct ProtocolContext ProtocolContext;
 
-typedef enum {
+typedef enum [[nodiscard]] {
     MC_STATE_HANDSHAKE = 0,
     MC_STATE_STATUS = 1,
     MC_STATE_LOGIN = 2,
@@ -20,7 +20,7 @@ typedef enum {
 
 typedef struct {
     void (*on_enter)(ProtocolContext *client);
-    [[nodiscard]] MinecraftState (*handle_packet)(ProtocolContext *client, uint32_t packet_id, const uint8_t *data, size_t len);
+    MinecraftState (*handle_packet)(ProtocolContext *client, uint32_t packet_id, const uint8_t *data, size_t len);
     void (*on_exit)(ProtocolContext *client);
 } StateBehaviour;
 
