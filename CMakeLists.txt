@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 4.3)
 project(ccraft C)
 
 set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
 add_executable(ccraft src/main.c src/network/tcp_server.c
         src/protocol/state_machine.c
@@ -15,4 +16,8 @@ add_executable(ccraft src/main.c src/network/tcp_server.c
         src/protocol/varint.c
         src/protocol/status.c
         include/protocol/packet_builder.h
-        src/protocol/packet_builder.c)
+        src/protocol/packet_builder.c
+        src/protocol/configuration.c
+        src/protocol/play.c
+        include/protocol/states.h
+        include/network/tcp_server.h)
