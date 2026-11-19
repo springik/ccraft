@@ -8,7 +8,7 @@
 #include "../../include/protocol/context.h"
 #include "../../include/protocol/varint.h"
 #include "../../include/network/connection.h"
-#include "packet_builder.c"
+#include "../../include/protocol/packet_builder.h"
 
 static void send_status_response(ProtocolContext* ctx) {
     //TODO: read from file at least and do not hardcode
