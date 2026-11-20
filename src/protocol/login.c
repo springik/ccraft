@@ -34,6 +34,8 @@ static MinecraftState login_handle(ProtocolContext* ctx, uint32_t packet_id, con
         if (name_len.bytes_read == 0 || name_len.value > 16)
             return MC_STATE_DISCONNECTED;
 
+        cursor += name_len.bytes_read;
+
         char username[17] = {0};
         memcpy(username, data + cursor, name_len.value);
         cursor += name_len.value;
