@@ -14,7 +14,7 @@ static void send_status_response(ProtocolContext* ctx) {
     //TODO: read from file at least and do not hardcode
     const char* json =
         "{"
-            "\"version\":{\"name\":\"1.20.1\",\"protocol\":763},"
+            "\"version\":{\"name\":\"1.20.2\",\"protocol\":764},"
             "\"players\":{\"max\":16,\"online\":0},"
             "\"description\":{\"text\":\"Hello from C23 Server!\"}"
         "}";
