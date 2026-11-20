@@ -16,7 +16,7 @@ static void send_login_play(ProtocolContext* ctx) {
     pb_write_bool(&pb, false); // Is Hardcore
 
     // Array of Dimension names (len=1)
-    pb_write_int(&pb, 1);
+    pb_write_varint(&pb, 1);
     pb_write_string(&pb, "minecraft:overworld");
 
     pb_write_varint(&pb, 100); // Max Players
