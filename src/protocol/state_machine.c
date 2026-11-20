@@ -3,6 +3,9 @@
 //
 
 #include "../../include/protocol/state_machine.h"
+
+#include <stdio.h>
+
 #include "../../include/protocol/context.h"
 
 constexpr size_t STATE_CAPACITY = 32;
@@ -15,6 +18,8 @@ void register_state(MinecraftState state, StateBehaviour behaviour) {
 }
 
 void process_client_packet(ProtocolContext *client, uint32_t packet_id, const uint8_t *data, size_t len) {
+    printf("[FSM] state=%d packet_id=0x%02X len=%zu\n", client->current_state, packet_id, len);
+
     StateBehaviour *current_behaviour = &state_machine_table[client->current_state];
 
     if (current_behaviour->handle_packet == nullptr) {
@@ -25,6 +30,8 @@ void process_client_packet(ProtocolContext *client, uint32_t packet_id, const ui
     MinecraftState next_state = current_behaviour->handle_packet(client, packet_id, data, len);
 
     if (next_state != client->current_state) {
+        printf("[FSM] transition: %d -> %d\n", client->current_state, next_state);
+
         if (current_behaviour->on_exit != nullptr)
             current_behaviour->on_exit(client);
 
