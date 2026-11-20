@@ -9,7 +9,7 @@
 
 static const uint8_t registry_nbt_blob[] = {
     // Compiler directly inserts the binary at compile time(this lives in executable ro mem and no need for fs io operations
-    #embed "../../include/registry_1_20_1.nbt"
+    #embed "../../include/registry_1_20_2.nbt"
 };
 
 static void send_registry_data(ProtocolContext* ctx) {
