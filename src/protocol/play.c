@@ -10,7 +10,7 @@
 
 static void send_login_play(ProtocolContext* ctx) {
     PacketBuilder pb;
-    pb_init(&pb, 0x28);
+    pb_init(&pb, 0x29);
 
     pb_write_int(&pb, 1); // Entity ID
     pb_write_bool(&pb, false); // Is Hardcore
