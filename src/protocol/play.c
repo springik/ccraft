@@ -66,6 +66,19 @@ static void send_set_center_chunk(ProtocolContext* ctx, int32_t chunk_x, int32_t
     pb_send(&pb, ctx->net_conn);
 }
 
+static void send_chunk_batch_start(ProtocolContext* ctx) {
+    PacketBuilder pb;
+    pb_init(&pb, 0x0D);
+    pb_send(&pb, ctx->net_conn);
+}
+
+static void send_chunk_batch_finished(ProtocolContext* ctx, int32_t batch_size) {
+    PacketBuilder pb;
+    pb_init(&pb, 0x0C);
+    pb_write_varint(&pb, batch_size);
+    pb_send(&pb, ctx->net_conn);
+}
+
 static void send_empty_chunk(ProtocolContext* ctx, int32_t chunk_x, int32_t chunk_z) {
     PacketBuilder pb;
     pb_init(&pb, 0x25); // chunk data & light update(1.20.1)
@@ -122,7 +135,11 @@ static void play_enter(ProtocolContext* ctx) {
 
     send_login_play(ctx);
     send_set_center_chunk(ctx, 0, 0);
+
+    send_chunk_batch_start(ctx);
     send_empty_chunk(ctx, 0, 0);
+    send_chunk_batch_finished(ctx, 1);
+
     send_synchronize_position(ctx);
     send_keep_alive(ctx, (int64_t)ctx->last_keep_alive);
 }
