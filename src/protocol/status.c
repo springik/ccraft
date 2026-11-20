@@ -12,11 +12,12 @@
 
 static void send_status_response(ProtocolContext* ctx) {
     //TODO: read from file at least and do not hardcode
-    const char* json = "{"
-        "\"version\": {\"name\": \"1.20.1\", \"protocol\": 763},"
-        "\"players\":{\"max\": 100, \"online\": 0},"
-        "\"description\": {\"text\": \"Hello from C23 Server!\""
-    "}";
+    const char* json =
+        "{"
+            "\"version\":{\"name\":\"1.20.1\",\"protocol\":763},"
+            "\"players\":{\"max\":16,\"online\":0},"
+            "\"description\":{\"text\":\"Hello from C23 Server!\"}"
+        "}";
 
     PacketBuilder pb;
     pb_init(&pb, 0x00);
@@ -76,6 +77,7 @@ static void send_ping_response(ProtocolContext* ctx, const uint8_t* ping_payload
 
 static MinecraftState status_handle(ProtocolContext* ctx, uint32_t packet_id, const uint8_t* data, size_t len) {
     if (packet_id == 0x00) {
+        printf("[STATUS]: Sending MOTD JSON\n");
         send_status_response(ctx);
         return MC_STATE_STATUS; // Wait for the follow-up ping
     }
@@ -85,12 +87,17 @@ static MinecraftState status_handle(ProtocolContext* ctx, uint32_t packet_id, co
         if (len < 8)
             return MC_STATE_DISCONNECTED;
 
+        printf("[STATUS]: Echoing ping\n");
+
         send_ping_response(ctx, data);
 
         /*
          * after reponding to the ping the sequence is complete and
          * we can disconnect the client
         */
+        if (packet_id != 0x00 && packet_id != 0x01)
+            printf("[STATUS]: Unexpected packet ID: 0x%02X\n", packet_id); // should format as 0xNM where N, M are digits(hex)
+
         return MC_STATE_DISCONNECTED;
     }
 }
