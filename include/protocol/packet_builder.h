@@ -10,7 +10,7 @@
 #include "../network/connection.h"
 
 // This might overflow with world chunk packets
-#define MAX_PACKET_SIZE 4096
+#define MAX_PACKET_SIZE 65536
 
 typedef struct {
     uint8_t payload[MAX_PACKET_SIZE];
