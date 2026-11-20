@@ -105,7 +105,7 @@ static void send_keep_alive(ProtocolContext* ctx, int64_t id) {
     pb_send(&pb, ctx->net_conn);
 }
 
-static void play_tick(ProtocolContext* ctx) {
+void play_tick(ProtocolContext* ctx) {
     if (ctx->current_state != MC_STATE_PLAY)
         return;
 
