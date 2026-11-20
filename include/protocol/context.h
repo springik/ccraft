@@ -4,6 +4,7 @@
 
 #pragma once
 #include <stdint.h>
+#include <time.h>
 #include "state_machine.h"
 
 typedef struct NetworkConnection NetworkConnection;
@@ -15,4 +16,5 @@ typedef struct ProtocolContext {
 
     char username[17]; // longest nickname(16 chars) + null terminator at the end
     uint8_t uuid[16];
+    time_t last_keep_alive; // for tracking next keep alive packet timing
 } ProtocolContext;
