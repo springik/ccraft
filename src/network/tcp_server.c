@@ -117,6 +117,7 @@ static void handle_client(int client_fd) {
         }
     }
 
+    shutdown(client_fd, SHUT_WR); // We still want to potentially receive
     close(client_fd);
     free(proto_ctx);
     free(net_conn);
