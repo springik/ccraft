@@ -5,6 +5,8 @@
 #include <string.h>
 #include "../../include/protocol/packet_builder.h"
 
+#include <stdio.h>
+
 
 void pb_init(PacketBuilder* pb, uint32_t packet_id) {
     pb->cursor = 0;
@@ -98,7 +100,7 @@ void pb_write_uuid(PacketBuilder* pb, const uint8_t uuid[16]) {
 
 void pb_send(PacketBuilder* pb, NetworkConnection* conn) {
     if (pb->overflow) {
-        // Consider logging an err here right now the overflowed packets are silently dropped
+        fprintf(stderr, "[PacketBuilder] ERROR: Packet overflowed MAX_PACKET_SIZE (%d bytes)!\n", MAX_PACKET_SIZE);
         return;
     }
 
@@ -106,5 +108,6 @@ void pb_send(PacketBuilder* pb, NetworkConnection* conn) {
     uint8_t frame[MAX_PACKET_SIZE + 5];
     size_t header_len = write_varint((int32_t)pb->cursor, frame);
     memcpy(frame + header_len, pb->payload, pb->cursor);
+
     network_send_data(conn, frame, header_len + pb->cursor);
 }
