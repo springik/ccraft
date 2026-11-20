@@ -8,14 +8,15 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <sys/socket.h>
+#include <poll.h>
 
 #include "../../include/network/connection.h"
 #include "../../include/protocol/context.h"
 #include "../../include/network/tcp_server.h"
-#include "../../include/network/connection.h"
 #include "../../include/protocol/state_machine.h"
 #include "../../include/protocol/varint.h"
 
+void play_tick(ProtocolContext* ctx);
 
 void handle_new_connection(int client_fd) {
     NetworkConnection *net_conn = calloc(1, sizeof(NetworkConnection));
@@ -33,6 +34,12 @@ void handle_new_connection(int client_fd) {
 void network_send_data(NetworkConnection* conn, const uint8_t* data, size_t len) {
     if (conn == nullptr || conn->socket_fd == 0)
         return;
+
+    printf("[NET] sending %zu bytes\n", len);
+    for (size_t i = 0; i < len && i < len; i++) {
+        printf(" %02x", data[i]);
+    }
+    printf("\n");
 
     size_t total_sent = 0;
     // "Temporary" solution for testing. Should be replaced when there's a network solution
@@ -58,12 +65,28 @@ static void handle_client(int client_fd) {
     proto_ctx->current_state = MC_STATE_HANDSHAKE;
     proto_ctx->net_conn = net_conn;
 
+    struct pollfd pfd = {
+        .fd = client_fd,
+        .events = POLLIN,
+    };
+
     while (proto_ctx->current_state != MC_STATE_DISCONNECTED) {
+        int ready = poll(&pfd, 1, 1000);
+        printf("[NET] poll returned %d (state=%d, cursor=%zu)\n", ready, proto_ctx->current_state, net_conn->read_cursor);
+        if (ready < 0)
+            break;
+
+        if (ready == 0) {
+            play_tick(proto_ctx);
+            continue;
+        }
+
         size_t space_left = sizeof(net_conn->read_buffer) - net_conn->read_cursor;
         if (space_left == 0)
             break; // Single packet over 4KB buff
 
         ssize_t n = recv(client_fd, net_conn->read_buffer + net_conn->read_cursor, space_left, 0);
+        printf("[NET] recv returned %zd bytes\n", n);
         if (n <= 0)
             break; // Client closed socket or netwrk err
 
@@ -115,6 +138,8 @@ static void handle_client(int client_fd) {
             }
             net_conn->read_cursor = remaining;
         }
+
+        play_tick(proto_ctx);
     }
 
     shutdown(client_fd, SHUT_WR); // We still want to potentially receive
